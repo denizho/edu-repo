@@ -85,9 +85,6 @@
     document.getElementById("prod_div").append(t_elem);
     for(i=0; i< data.length;i++)  prod_add_new_row(document.getElementById("prod_table"), data[i]);
 
-
-
-    //// add_table
     t_elem = document.createElement('table');
     t_elem.append(document.createElement('tr'));
     t_elem.firstChild.append(document.createElement('td'));
@@ -141,13 +138,6 @@
    
     })
     .catch((ex) => console.log("parsing failed", ex));
-
-
-
-
-
-////// prod_
-
 
 function prod_save(){
     this.classList.add('hidden_class');
@@ -281,10 +271,6 @@ function prod_edit(){
     })
     .catch((ex) => console.log("parsing failed", ex));
 
-
-
-
-
 }
 
 function prod_del(){    
@@ -309,7 +295,6 @@ function prod_del(){
     })
     .catch((ex) => {
         alert("failed!!! " + ex.statusText);
-        // console.log("failed!!! ", ex);
     });
 
 }
@@ -322,9 +307,6 @@ function prod_add(){
     prod_new.price = this.parentElement.parentElement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.value;
     prod_new.kol = this.parentElement.parentElement.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.value;
     prod_new.img = this.parentElement.parentElement.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.value;
-
-
-    
     prod_new.oper = "add";
 
     fetch('edit-prod.php',{
@@ -340,7 +322,7 @@ function prod_add(){
         prod_new.id = result[0].id;
         delete prod_new.oper;
         prod_add_new_row(document.getElementById("prod_table"),prod_new);
-        // console.log(result);
+        console.log(result);
     })
     .catch((ex) => console.log("failed!!! ", ex));
 
@@ -350,12 +332,6 @@ function prod_add(){
     this.parentElement.parentElement.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.value = "";
     this.parentElement.parentElement.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.firstChild.value = "";
 }
-
-///// end prod_
-
-
-
-///// cat_
 
 
 
@@ -441,8 +417,7 @@ function cat_del(){
     })
     .catch((ex) => {
         alert("failed!!! " + ex.statusText);
-        // console.log("failed!!! ", ex);
-    });
+        });
 
 }
 
@@ -472,14 +447,6 @@ function cat_add(){
 
     this.parentElement.parentElement.firstChild.nextSibling.firstChild.value = "";
 }
-
-
-
-
-//////// end cat_
-
-
-
 
 
 
@@ -585,5 +552,14 @@ function update_cat_list(){
         .catch((ex) => console.log("parsing failed", ex));
 }
 
+function update_prod_list(){
+    fetch("get-prod.php")
+        .then((response) => response.json())
+        .then((data) => {
+            for(i=0; i< data.length;i++) 
+             prod_add_new_row(document.getElementById("prod_table"), data[i]);
+        })
+        .catch((ex) => console.log("parsing failed", ex));
+}
 </script>
 </html>

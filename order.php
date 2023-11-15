@@ -99,9 +99,7 @@ if(isset($_POST["order"])){
                         <button id="delbtn">Удалить</button>
                       </a>
                   </td>
-                </tr>
-                  '
-                  ;
+                </tr>';
                   
                   $total= $total + $value['kolord'] * $value['price'];
                 };
@@ -119,7 +117,7 @@ if(isset($_POST["order"])){
               </table>
               ';
                 echo $output;
-                $button=' <a href="order.php?action=clearall"><button id="btnzak" onclick="alert(`Заказ сделан`)">Сделать заказ</button></a>';
+                $button=' <button type="button" id="btnzak">Сделать заказ</button>';
                 echo $button;
                 };?>
            

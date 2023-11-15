@@ -10,21 +10,20 @@ if(isset($_POST['oper'])){$oper = $_POST['oper'];}else {echo(json_encode("Пер
 
 switch($oper){
     case "add":
-        $sql = "call insertprod('$name',(select id from categ where kat='$categ'),'$price', '$img','$kol')";
+        $sql = "call insertprod('$name',(select id from categ where kat='$categ'),$price, '$img',$kol)";
         if(!mysqli_query($db_handler,$sql)){
             header($_SERVER['SERVER_PROTOCOL'].'500 Internal Server Error',true,500);
             header('Content-Type: text/html; charset=utf-8');
             echo "Ошибка добавления товара!1 ".mysqli_error($db_handler);
         } else {
-            $sql = "select p.id 
+            $sql = "select p.id
             FROM prod p 
             LEFT JOIN sklad s ON p.id = s.prod_id 
             WHERE p.name = '$name' 
             AND p.categ_id = (SELECT c.id FROM categ c WHERE c.kat = '$categ') 
-            AND p.price = '$price' 
-            AND s.kol = '$kol' 
-            AND p.img = '$img'
-            AND p.id='$id';";
+            AND p.price = $price
+            AND s.kol = $kol 
+            AND p.img = '$img';";
             if(!($result=mysqli_query($db_handler,$sql))){
                 header($_SERVER['SERVER_PROTOCOL'].'500 Internal Server Error',true,500);
                 header('Content-Type: text/html; charset=utf-8');
@@ -40,7 +39,7 @@ switch($oper){
         break;
     case "edit":
         if(!$id) die(json_encode("Не установлен id для изменения счета!!!"));
-        $sql = "call update228($id,'$name',(select id from categ where kat='$categ'), $price, '$img', $kol)";
+        $sql = "call updateProductAndSklad($id,'$name',(select id from categ where kat='$categ'), $price, '$img', $kol)";
         if(!mysqli_query($db_handler,$sql)){
             header($_SERVER['SERVER_PROTOCOL'].'500 Internal Server Error',true,500);
             header('Content-Type: text/html; charset=utf-8');
