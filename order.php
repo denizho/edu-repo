@@ -120,7 +120,9 @@ if(isset($_POST["order"])){
                 $button=' <button type="button" id="btnzak">Сделать заказ</button>';
                 echo $button;
                 };?>
-           
+            <script>
+              
+            </script>
           <?php
             if (isset($_GET['action'])){
                 if ($_GET['action'] == 'clearall'){
