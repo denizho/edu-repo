@@ -1,6 +1,6 @@
 <?php
 include_once("init.php");
-$sql = "select id, product, price, kolord, predp_id
+$sql = "select id, product, price, kolord, predp_id, datetime
 from orders";
 $result = mysqli_query($db_handler,$sql) or die("Ошибка запроса БД".mysqli_error($db_handler));
 while($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){

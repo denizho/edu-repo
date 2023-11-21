@@ -4,7 +4,7 @@ $prodid = $_POST['prodid'];
 $price = $_POST['price'];
 $kolord = $_POST['kolord'];
 $predp = $_POST['predp'];
-$sql = "insert into orders(product,price, kolord, predp_id) values ('$prodid','$price', '$kolord', '$predp')";
+$sql = "insert into orders(product,price, kolord, predp_id, datetime) values ('$prodid','$price', '$kolord', '$predp', now())";
         if(!mysqli_query($db_handler,$sql)){
             header($_SERVER['SERVER_PROTOCOL'].'500 Internal Server Error',true,500);
             header('Content-Type: text/html; charset=utf-8');
