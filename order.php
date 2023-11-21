@@ -1,7 +1,6 @@
 
 <?php
 session_start();
-$connect = mysqli_connect('localhost','root','root','mydb');
 if(isset($_POST["order"])){
   if(isset($_SESSION['car11'])){
       $session_array_id= array_column($_SESSION['car11'], 'id');
@@ -157,6 +156,7 @@ if(isset($_POST["order"])){
                   xml.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                   xml.send('prodid=' + prodid + '&price=' + price + '&kolord=' + kolord + '&predp=' + predp);
                 }
+                alert('Заказ сделан');
               }
                 
 
