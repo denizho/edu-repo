@@ -552,14 +552,6 @@ function update_cat_list(){
         .catch((ex) => console.log("parsing failed", ex));
 }
 
-function update_prod_list(){
-    fetch("get-prod.php")
-        .then((response) => response.json())
-        .then((data) => {
-            for(i=0; i< data.length;i++) 
-             prod_add_new_row(document.getElementById("prod_table"), data[i]);
-        })
-        .catch((ex) => console.log("parsing failed", ex));
-}
+
 </script>
 </html>

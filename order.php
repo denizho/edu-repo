@@ -70,11 +70,32 @@ if(isset($_POST["order"])){
                   </div>
                 <?php }?>
               </div>
+              <script>
+                fetch("get-contragents.php")
+                .then((response) => response.json())
+                .then((data) => {
+                    const selCont = document.getElementById("sel_contr"); 
+
+                    sel_cat = document.createElement('select');
+                    sel_cat.id = "sel_cat";
+                    sel_cat.style.width = '100%';
+
+                    data.forEach(row => {
+                        const newOption = document.createElement("option");
+                        newOption.value = row.id;
+                        newOption.text = row.name;
+                        sel_cat.appendChild(newOption);
+                    });
+
+                    selCont.appendChild(sel_cat); 
+                  });
+            
+</script>
           <?php 
           $total=0;
            $output='';
            $output = '
-           <table class="cart__order">
+           <table class="cart__order" id="cart_table">
             <tr>
               <th>Ид</th>
               <th>Фирма</th>
@@ -105,7 +126,7 @@ if(isset($_POST["order"])){
                 };
               $output .= '
               <tr>
-                <td colspan="3"></td>
+                <td colspan="3" id="sel_contr"></td>
                 <td>Итог всего</td>
                 <td>'.$total.'</td>
                 <td>
@@ -117,11 +138,28 @@ if(isset($_POST["order"])){
               </table>
               ';
                 echo $output;
-                $button=' <button type="button" id="btnzak">Сделать заказ</button>';
+                $button=' <button type="button" id="btnzak" onclick="insertOrder()">Сделать заказ</button>';
                 echo $button;
                 };?>
             <script>
-              
+              function insertOrder() {
+                let table = document.getElementById("cart_table");
+                let rows = table.getElementsByTagName('tr');
+
+                for (i = 1; i < rows.length - 1; i++) {
+                  let cells = rows[i].getElementsByTagName('td');
+                  var prodid = cells[0].textContent;       
+                  var price = cells[5].textContent;
+                  var kolord = cells[4].textContent;
+                  let predp = document.getElementById("sel_cat").value;                  
+                  let xml = new XMLHttpRequest();
+                  xml.open('POST','insertprod.php', true);
+                  xml.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                  xml.send('prodid=' + prodid + '&price=' + price + '&kolord=' + kolord + '&predp=' + predp);
+                }
+              }
+                
+
             </script>
           <?php
             if (isset($_GET['action'])){
