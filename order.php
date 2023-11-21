@@ -1,4 +1,4 @@
-<?php error_reporting(0); ?>
+
 <?php
 session_start();
 $connect = mysqli_connect('localhost','root','root','mydb');
@@ -64,7 +64,7 @@ if(isset($_POST["order"])){
                               <input type='hidden' name='name' value='<?=$row['name']?>'>
                               <input type='hidden' name='price' value='<?=$row['price']?>'>
                               <input type='hidden' name='kol' value='<?=$row['kol']?>'>
-                              <input type='number' class='inputkol' min="1" name='kolord' value=1>
+                              <input type='number' class='inputkol' min="1" max="<?=$row['kol']?>"name='kolord' value=1>
                               <input type="submit" id='btn-1' name="order" value="Добавить в корзину">       
                       </form>
                   </div>
