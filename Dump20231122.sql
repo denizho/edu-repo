@@ -51,9 +51,10 @@ CREATE TABLE `orders` (
   `product` varchar(45) NOT NULL,
   `price` varchar(45) NOT NULL,
   `kolord` varchar(45) NOT NULL,
-  `predp_id` varchar(45) DEFAULT NULL,
+  `predp_id` varchar(45) NOT NULL,
+  `datetime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +63,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (83,'1','2295000','51','0');
+INSERT INTO `orders` VALUES (100,'1','30002','1','1','2023-11-21 13:28:40'),(101,'1','180000','4','3','2023-11-21 14:03:16'),(102,'1','45000','1','1','2023-11-21 14:09:44'),(103,'2','30002','1','9','2023-11-21 14:12:51');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -75,10 +76,12 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `orders_BEFORE_INSERT` BEFORE INSERT ON `orders` FOR EACH ROW BEGIN
-	IF NEW.kolord > kol THEN SIGNAL 
+  DECLARE kol INT;   
+     SELECT sklad.kol INTO kol FROM sklad WHERE sklad.id = NEW.product; 
+IF NEW.kolord > kol THEN SIGNAL 
      SQLSTATE '45000' SET MESSAGE_TEXT = 'Ошибка! Количество на складе меньше, чем заказанное количество.';
-    ELSE        UPDATE sklad SET kol = kol - NEW.kolord WHERE id = NEW.product; 
     END IF;
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -95,8 +98,7 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `orders_AFTER_INSERT` AFTER INSERT ON `orders` FOR EACH ROW BEGIN
-     DECLARE kol INT;   
-     SELECT sklad.kol INTO kol FROM sklad WHERE sklad.id = NEW.product; 
+	UPDATE sklad SET kol = kol - NEW.kolord WHERE id = NEW.product; 
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -173,7 +175,7 @@ CREATE TABLE `predp` (
   `address` varchar(45) DEFAULT NULL,
   `imgpred` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,7 +184,7 @@ CREATE TABLE `predp` (
 
 LOCK TABLES `predp` WRITE;
 /*!40000 ALTER TABLE `predp` DISABLE KEYS */;
-INSERT INTO `predp` VALUES (1,'StreetBeat','Москва, Щелковской шоссе, Дом 23',NULL),(2,'SuperStep','Москва, ул. Парковая 4-я, дом 10',NULL),(3,'SportMaster','Москва, Сиреневый бульвар, дом 3',NULL);
+INSERT INTO `predp` VALUES (1,'StreetBeat','Москва, Щелковской шоссе, Дом 23',NULL),(2,'SuperStep','Москва, ул. Парковая 4-я, дом 10',NULL),(3,'SportMaster','Москва, Сиреневый бульвар, дом 3',NULL),(9,'dsd','ddd',NULL);
 /*!40000 ALTER TABLE `predp` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,7 +204,7 @@ CREATE TABLE `prod` (
   PRIMARY KEY (`id`),
   KEY `fk_prod_categ1_idx` (`categ_id`),
   CONSTRAINT `fk_prod_categ1` FOREIGN KEY (`categ_id`) REFERENCES `categ` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,7 +213,7 @@ CREATE TABLE `prod` (
 
 LOCK TABLES `prod` WRITE;
 /*!40000 ALTER TABLE `prod` DISABLE KEYS */;
-INSERT INTO `prod` VALUES (1,'Air Max Plus',1,45000,'http://localhost/my-repo-main/images/1.png'),(2,'1 Retro High OG SP',1,30002,'http://localhost/my-repo-main/images/2.png'),(3,'Campus 00s',1,70000,'http://localhost/my-repo-main/images/3.png');
+INSERT INTO `prod` VALUES (1,'Air Max Plus',3,45000,'http://localhost/my-repo-main/images/1.png'),(2,'1 Retro High OG SP',2,30002,'http://localhost/my-repo-main/images/2.png'),(3,'Campus 00s',1,70000,'http://localhost/my-repo-main/images/3.png');
 /*!40000 ALTER TABLE `prod` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,7 +232,7 @@ CREATE TABLE `sklad` (
   PRIMARY KEY (`id`),
   KEY `fk_sklad_prod1_idx` (`prod_id`),
   CONSTRAINT `fk_sklad_prod1` FOREIGN KEY (`prod_id`) REFERENCES `prod` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,37 +241,8 @@ CREATE TABLE `sklad` (
 
 LOCK TABLES `sklad` WRITE;
 /*!40000 ALTER TABLE `sklad` DISABLE KEYS */;
-INSERT INTO `sklad` VALUES (1,5,'2023-05-03',1),(2,42,'2023-05-04',2),(3,4,'2023-05-05',3);
+INSERT INTO `sklad` VALUES (1,52,'2023-05-03',1),(2,41,'2023-05-04',2),(3,4,'2023-05-05',3);
 /*!40000 ALTER TABLE `sklad` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `specif`
---
-
-DROP TABLE IF EXISTS `specif`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `specif` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `orders_id` int NOT NULL,
-  `prod_id` int NOT NULL,
-  `kolord` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_specif_orders1_idx` (`orders_id`),
-  KEY `fk_specif_prod_idx` (`prod_id`),
-  CONSTRAINT `fk_specif_orders1` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`id`),
-  CONSTRAINT `fk_specif_prod` FOREIGN KEY (`prod_id`) REFERENCES `prod` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `specif`
---
-
-LOCK TABLES `specif` WRITE;
-/*!40000 ALTER TABLE `specif` DISABLE KEYS */;
-/*!40000 ALTER TABLE `specif` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -408,4 +381,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-21 11:12:23
+-- Dump completed on 2023-11-22  8:25:31
