@@ -1,6 +1,7 @@
 
 <?php
 session_start();
+$connect = mysqli_connect('localhost','root','root','mydb');
 if(isset($_POST["order"])){
   if(isset($_SESSION['car11'])){
       $session_array_id= array_column($_SESSION['car11'], 'id');
@@ -33,6 +34,7 @@ if(isset($_POST["order"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кроссы — и точка</title>
     <link rel="stylesheet" href="style.css"/>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
   </head>
   <body>
     <?php
@@ -158,8 +160,7 @@ if(isset($_POST["order"])){
                 }
                 alert('Заказ сделан');
               }
-                
-
+       
             </script>
           <?php
             if (isset($_GET['action'])){
